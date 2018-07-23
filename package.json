@@ -1,0 +1,24 @@
+{
+  "name": "waiter-availability",
+  "version": "1.0.0",
+  "description": "Simple waiter shift recording application",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "nodemon app"
+  },
+  "author": "Luvuyo Sono",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "express-flash": "0.0.2",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "pg": "^7.4.3"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3"
+  }
+}
