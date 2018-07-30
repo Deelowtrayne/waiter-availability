@@ -1,2 +1,23 @@
+<link rel="stylesheet" href="/css/weekdays.css">
 
 <span>{{username}}'s dashboard</span>
+<hr>
+<!-- weekday list display -->
+<div class="weekday-display">
+    <h4>Choose your shifts: </h4>
+    <form action="/waiter/add-shifts/{{username}}" method="post">
+        <ul class="unstyled ">
+            {{#each weekdays}}
+            <li class="weekday ">
+                <input type="checkbox" 
+                    name="checkedWeekdays"
+                    class="styled-checkbox 
+                        {{dayOneClass}} {{dayTwoClass}} {{sameDayClass}}"
+                    id="{{id}}">
+                <label for="{{id}}">{{day_name}}</label>
+            </li>
+            {{/each}}
+        </ul>
+        <input type="submit" value="Submit">
+    </form>
+</div>

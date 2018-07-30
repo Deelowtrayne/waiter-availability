@@ -51,6 +51,64 @@ input {
     border-radius: 6px;
 }
 
+/* weekdays styles */
+.weekday-display {
+    padding: 0;
+    width: fit-content;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* .weekday-display:after {
+    content: "";
+    display: table;
+    clear: both;
+  } */
+  
+  .weekday {
+    padding: 1rem;
+    float: left;
+    font-size: small;
+    border: 1px solid #F0F0F1;
+  }
+  
+  .weekday:first-of-type {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  
+  .weekday:last-of-type {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  
+  .first-date-color, .second-date-color, .match-color {
+    color: #fff;
+    font-weight: bold;
+    padding: 1.3rem;
+    margin-top: -0.3rem;
+    border: none;
+    box-shadow: 0px 2px 3px #ccc;
+    /* transition: all padding 5s; */
+  }
+  
+  .first-date-color {
+    background: crimson;
+  }
+  
+  .second-date-color {
+    background: rgb(22, 94, 189);
+  }
+  
+  .match-color {
+    background: green;
+  }
+  
+
 #username-input {
     width: 80%;
 }
+
+
+

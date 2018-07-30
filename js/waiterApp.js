@@ -44,7 +44,7 @@ module.exports = function(dbname="waiter_availability") {
 
     async function getShifts() {
         let res = await pool.query('select user_id, weekday_id from shifts');
-        let results = res.rows;  
+        let results = res.rows;
         var shiftData = [];     
 
         for(let row of results){
@@ -58,6 +58,11 @@ module.exports = function(dbname="waiter_availability") {
         return shiftData; 
     }
 
+    async function getWeekdays() {
+        let results = await pool.query('select * from weekdays');
+        return results.rows;
+    }
+
     async function stopQuery(){
         await pool.end();
     }
@@ -68,6 +73,7 @@ module.exports = function(dbname="waiter_availability") {
         users: getAllUsers,
         getShifts, 
         registerShift,
+        getWeekdays,
         stopQuery
     }
 }

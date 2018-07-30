@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "start": "node app.js"
   },
   "author": "Luvuyo Sono",
   "license": "ISC",
