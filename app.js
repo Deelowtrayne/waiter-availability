@@ -20,10 +20,17 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+//sign-in route
+app.post('/sign-in', (req, res) => {
+    res.redirect('/waiter/' + req.body.username);
+});
+
 app.get('/waiter/:username', async (req, res) =>{
-    
+    let context = {
+        username: req.params.username
+    }
+    res.render('dashboard', context);
 });
 
 // Serve app on port 3000
 app.listen(PORT, () => console.log('Server started on port', PORT));
-
