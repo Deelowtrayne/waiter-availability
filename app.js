@@ -55,7 +55,7 @@ app.get('/waiter/:username', async (req, res, next) =>{
     }
 });
 
-app.post('/waiter/add-shifts/:username', async (req, res, next) =>{
+app.post('/waiter/:username/assign-shifts', async (req, res, next) =>{
     try {
         await waiterApp.registerShift({
             username: req.params.username,
@@ -74,3 +74,4 @@ app.get('/days', async (req, res, next) => {
 
 // Serve app on port 3000
 app.listen(PORT, () => console.log('Server started on port', PORT));
+

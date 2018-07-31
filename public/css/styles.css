@@ -91,10 +91,10 @@ input {
     border-bottom-right-radius: 6px;
   }
   
-  .bgRed, .bgOrange, .bgGreen {
+  .bgRed, .bgBlue, .bgGreen {
     color: #fff;
     border: none;
-    
+
     /* transition: all padding 5s; */
   }
   
@@ -115,13 +115,26 @@ input {
     width: 80%;
 }
 
-/* table styles */
-table {
-    border-collapse: collapse;
+/* roster styles */
+.roster {
+    display: table-cell;
+    border: 1px #ccc solid;
+    padding: 0.8rem;
+    min-height: 180px;
+    margin-right: 0.8rem; 
+    margin-bottom: 0.8rem; 
+}
+.roster ul {
+    list-style: none;
+    padding: 0px;
 }
 
-table td {
-    border: 1px #ccc solid;
-    padding: 0.8rem 1rem;
-    width: 220px;
+.roster ul li {
+    margin-bottom: 12px;
+}
+
+.roster-head {
+    border-bottom: 1px #ccc solid;
+    font-weight: 700;
+    padding-bottom: 8px;
 }

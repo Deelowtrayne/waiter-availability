@@ -3,22 +3,27 @@
 <span>{{username}}'s dashboard</span>
 <hr>
 <!-- weekday list display -->
+
 <div class="weekday-display">
+    {{#if weekdays}}
     <h4>Choose your shifts: </h4>
-    <form action="/waiter/add-shifts/{{username}}" method="post">
+    <form action="/waiter/{{username}}/assign-shifts" method="post">
         <ul class="unstyled ">
             {{#each weekdays}}
-            <li class="weekday ">
+            <li class="weekday">
                 <input type="checkbox" 
                     name="checkedWeekdays"
-                    class="styled-checkbox 
-                        {{dayOneClass}} {{dayTwoClass}} {{sameDayClass}}"
+                    class="styled-checkbox"
                     id="{{id}}"
-                    value="{{day_name}}">
+                    value="{{day_name}}">   
                 <label for="{{id}}">{{day_name}}</label>
             </li>
             {{/each}}
         </ul>
         <input type="submit" value="Submit">
     </form>
+    {{else}}
+    <h2 style="font-size:200%; font-weight:400; color:crimson;">Please enter a registered user</h2>
+    <a class="blue-link" style="color:blue; font-size:140%;" href="/">&larr; Go to sign in</a>
+    {{/if}}
 </div>

@@ -1,11 +1,22 @@
 <span>Waiter shifts</span>
 <br><br>
-    <span><a href="/waiter/" class="blue-link">&larr; <small>Dashboard</small></a></span>
+    <span><a href="/waiter/" >&larr; <small class="blue-link">Dashboard</small></a></span>
 <br><br>
+{{#each shifts}}
+<div class="roster {{rowStyle}}">
+    <div class="roster-head">
+        {{weekday}}
+    </div>
+    <ul>
+        {{#each waiters}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</div>
+{{/each}}
 
-
-
-{{!-- <table>
+{{!-- 
+<table>
     <tr>
         <td><b>Shifts</b></td>
         <td><b>Waiters</b></td>
@@ -13,7 +24,7 @@
     {{#each shifts}}
     <tr>
         <td>{{weekday}}</td>
-        <td class="{{rowStyle}}">{{waitersOnDuty}}</td>
+        <td >{{waitersOnDuty}}</td>
     </tr>
     {{/each}}
 </table> --}}
