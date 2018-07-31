@@ -45,7 +45,7 @@ module.exports = function(dbname="waiter_availability") {
     async function getShifts() {
         let res = await pool.query('select user_id, weekday_id from shifts');
         let results = res.rows;
-        var shiftData = [];     
+        var shiftData = [];
 
         for(let row of results){
             var user = await pool.query('select username from users where id=$1 limit 1', [row.user_id])
@@ -53,9 +53,34 @@ module.exports = function(dbname="waiter_availability") {
             shiftData.push({
                 username: user.rows[0].username, 
                 weekday: weekday.rows[0].day_name
-            })
+            });
         };
         return shiftData; 
+    }
+
+    async function orderByDay(){
+        let users = await getAllUsers();
+        let shifts = await getShifts();
+        let shiftData = [
+            // {
+            //    weekday: "",
+            //    waiters : []
+            // }
+        ];
+
+        for (let shift of shifts){
+            let shiftForDay = shiftData.find((currentShift) => shift.weekday === currentShift.weekday )
+            if (shiftForDay) {
+                shiftForDay.waiters.push(shift.username);
+            }
+            else {
+                shiftData.push({
+                    weekday : shift.weekday,
+                    waiters : [shift.username]
+                });
+            }
+        }
+        return shiftData;
     }
 
     async function getWeekdays() {
@@ -74,6 +99,7 @@ module.exports = function(dbname="waiter_availability") {
         getShifts, 
         registerShift,
         getWeekdays,
+        orderByDay,
         stopQuery
     }
 }

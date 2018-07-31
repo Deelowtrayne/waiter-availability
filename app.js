@@ -11,9 +11,20 @@ const PORT = process.env.PORT || 3000;
 app.engine('handlebars', exphb({
     defaultLayout: 'main',
     helpers:{
-        'formattedShifts': function() {
+        'waitersOnDuty': function() {
             let output = '';
-            weekdays
+            for (let waiter of this.waiters) {
+                output += (waiter + " - ");
+            }
+            return output;
+        },
+        'rowStyle': function() {
+            if (this.waiters.length > 2)
+                return 'bgRed';
+            else if (this.waiters.length > 1)
+                return 'bgBlue';
+            else
+                return 'bgGreen';
         }
     }
 }));
@@ -50,16 +61,15 @@ app.post('/waiter/add-shifts/:username', async (req, res, next) =>{
             username: req.params.username,
             weekdays: req.body.checkedWeekdays
         });
-
         res.redirect('/days');
-
     } catch (err) {
         next(err);
     }
 });
 
 app.get('/days', async (req, res, next) => {
-    res.render('shifts', {shifts: await waiterApp.getShifts()});
+    //let context = 
+    res.render('shifts', {shifts: await waiterApp.orderByDay()});
 })
 
 // Serve app on port 3000

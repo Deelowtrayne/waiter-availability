@@ -1,14 +1,19 @@
 <span>Waiter shifts</span>
+<br><br>
+    <span><a href="/waiter/" class="blue-link">&larr; <small>Dashboard</small></a></span>
+<br><br>
 
-<table>
+
+
+{{!-- <table>
     <tr>
-        <td><b>Username</b></td>
         <td><b>Shifts</b></td>
+        <td><b>Waiters</b></td>
     </tr>
     {{#each shifts}}
     <tr>
-        <td>{{username}}</td>
         <td>{{weekday}}</td>
+        <td class="{{rowStyle}}">{{waitersOnDuty}}</td>
     </tr>
     {{/each}}
-</table>
+</table> --}}
