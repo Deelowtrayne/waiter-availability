@@ -1,6 +1,8 @@
+<title>Dashboard</title>
+
 <span>Waiter shifts</span>
 <br><br>
-    <span><a href="/waiter/" >&larr; <small class="blue-link">Dashboard</small></a></span>
+    <span><a href="/waiter/{{username}}" >&larr; <small class="blue-link">Dashboard</small></a></span>
 <br><br>
 {{#each shifts}}
 <div class="roster {{rowStyle}}">
@@ -14,17 +16,3 @@
     </ul>
 </div>
 {{/each}}
-
-{{!-- 
-<table>
-    <tr>
-        <td><b>Shifts</b></td>
-        <td><b>Waiters</b></td>
-    </tr>
-    {{#each shifts}}
-    <tr>
-        <td>{{weekday}}</td>
-        <td >{{waitersOnDuty}}</td>
-    </tr>
-    {{/each}}
-</table> --}}

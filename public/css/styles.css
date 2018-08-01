@@ -68,11 +68,11 @@ input {
     margin-bottom: 2rem;
   }
   
-  /* .weekday-display:after {
+  .weekdays:after {
     content: "";
     display: table;
     clear: both;
-  } */
+  }
   
   .weekday {
     padding: 1rem;

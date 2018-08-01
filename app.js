@@ -43,11 +43,17 @@ app.post('/sign-in', (req, res) => {
     res.redirect('/waiter/' + req.body.username);
 });
 
-app.get('/waiter/:username', async (req, res, next) =>{
+app.get('/waiter/not-found', (req, res) => {
+    res.render('dashboard');
+});
+
+app.get('/waiter/:username', async (req, res, next) => {
     try {
-        let context = {
-            username: req.params.username,
-            weekdays: await waiterApp.getWeekdays()
+        let user = req.params.username;
+        let context = {};
+        if (await waiterApp.updateActiveUser(user)) {
+            context.username = await waiterApp.getActiveUser;
+            context.weekdays = await waiterApp.getWeekdays();
         }
         res.render('dashboard', context);
     } catch (err) {
@@ -55,7 +61,7 @@ app.get('/waiter/:username', async (req, res, next) =>{
     }
 });
 
-app.post('/waiter/:username/assign-shifts', async (req, res, next) =>{
+app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
     try {
         await waiterApp.registerShift({
             username: req.params.username,
@@ -68,8 +74,15 @@ app.post('/waiter/:username/assign-shifts', async (req, res, next) =>{
 });
 
 app.get('/days', async (req, res, next) => {
-    //let context = 
-    res.render('shifts', {shifts: await waiterApp.orderByDay()});
+    try {
+        let context = {
+            shifts: await waiterApp.orderByDay(),
+            username: await waiterApp.getActiveUser()
+        }
+        res.render('shifts', context);
+    } catch (err) {
+        next(err);
+    }
 })
 
 // Serve app on port 3000

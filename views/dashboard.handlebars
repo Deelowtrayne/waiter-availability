@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/css/weekdays.css">
-
+{{#if weekdays}}
 <span>{{username}}'s dashboard</span>
+{{/if}}
 <hr>
 <!-- weekday list display -->
 
@@ -8,10 +9,10 @@
     {{#if weekdays}}
     <h4>Choose your shifts: </h4>
     <form action="/waiter/{{username}}/assign-shifts" method="post">
-        <ul class="unstyled ">
+        <ul class="unstyled weekdays">
             {{#each weekdays}}
             <li class="weekday">
-                <input type="checkbox" 
+                <input type="checkbox"
                     name="checkedWeekdays"
                     class="styled-checkbox"
                     id="{{id}}"

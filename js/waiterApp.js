@@ -4,6 +4,8 @@ const chalk = require('chalk');
 module.exports = function(dbname="waiter_availability") {
     const pool = dbconx(dbname);
 
+    var activeUser = '';
+
     async function resetData(){
         try{
             await pool.query('truncate table shifts');
@@ -31,6 +33,11 @@ module.exports = function(dbname="waiter_availability") {
         const days = shift.weekdays;
         const found = await pool.query('select id from users where username=$1', [shift.username]);
         const userId = found.rows[0].id;
+
+        // {
+        //     username: "deelow",
+        //     weekdays: []
+        // }
 
         for(let day of days){
             try {
@@ -61,12 +68,7 @@ module.exports = function(dbname="waiter_availability") {
     async function orderByDay(){
         let users = await getAllUsers();
         let shifts = await getShifts();
-        let shiftData = [
-            // {
-            //    weekday: "",
-            //    waiters : []
-            // }
-        ];
+        let shiftData = [];
 
         for (let shift of shifts){
             let shiftForDay = shiftData.find((currentShift) => shift.weekday === currentShift.weekday )
@@ -83,6 +85,15 @@ module.exports = function(dbname="waiter_availability") {
         return shiftData;
     }
 
+    async function updateActiveUser(value) {
+        let found = await pool.query('select username from users where username=$1', [value]);
+        if (found.rowCount > 0) {
+            activeUser = found.rows[0].username;
+            return true;
+        }
+        return false
+    }
+
     async function getWeekdays() {
         let results = await pool.query('select * from weekdays');
         return results.rows;
@@ -91,15 +102,21 @@ module.exports = function(dbname="waiter_availability") {
     async function stopQuery(){
         await pool.end();
     }
+
+    function getActiveUser(){
+        return activeUser;
+    }
     
     return {
         reset: resetData,
         addUser: addWaiter,
         users: getAllUsers,
+        updateActiveUser,
         getShifts, 
         registerShift,
         getWeekdays,
         orderByDay,
+        getActiveUser,
         stopQuery
     }
 }
