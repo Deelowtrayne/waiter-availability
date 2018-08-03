@@ -8,7 +8,7 @@ node_js:
   - "8.11.3"
 
 before_script:
-  - psql -c 'create database  waiter-availability;' -U postgres
+  - psql -c 'create database  waiter_availability;' -U postgres
   - psql -U postgres -d waiter_availability -a -f database_setup.sql
   - psql -U postgres -d waiter_availability -a -f insert_data.sql
 
