@@ -1,7 +1,6 @@
 const pg = require('pg');
 
 module.exports = function (dbname) {
-    const connectionString = process.env.DATABASE_URL || 'postgresql://coder:coder123@localhost:5432/' + dbname;
     const Pool = pg.Pool;
 
     let useSSL = false;
@@ -13,6 +12,9 @@ module.exports = function (dbname) {
         connectionString,
         ssl: useSSL
     });
+
+    const connectionString = process.env.DATABASE_URL || 'postgresql://deelowtrayne:nomawonga@localhost:5432/' + dbname;
+
 
     return pool;
 }
