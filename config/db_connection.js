@@ -7,13 +7,12 @@ module.exports = function (dbname) {
     if (process.env.DATABASE_URL) {
         useSSL = true;
     }
+    const connectionString = process.env.DATABASE_URL || 'postgresql://deelowtrayne:nomawonga@localhost:5432/' + dbname;
 
     const pool = new Pool({
         connectionString,
         ssl: useSSL
     });
-
-    const connectionString = process.env.DATABASE_URL || 'postgresql://deelowtrayne:nomawonga@localhost:5432/' + dbname;
 
     return pool;
 }
