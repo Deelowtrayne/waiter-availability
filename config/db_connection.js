@@ -15,6 +15,5 @@ module.exports = function (dbname) {
 
     const connectionString = process.env.DATABASE_URL || 'postgresql://deelowtrayne:nomawonga@localhost:5432/' + dbname;
 
-
     return pool;
 }
