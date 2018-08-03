@@ -1,4 +1,14 @@
 
 language: node_js
+
+env:
+  - DATABASE_URL=postgresql://postgres@localhost:5432/waiter-availability
+
 node_js:
   - "8.11.3"
+
+before_script:
+  - psql -c 'create database  waiter-availability;' -U postgres
+  - psql -U postgres -d waiter-availability -a -f database_setup.sql
+  - psql -U postgres -d waiter-availability -a -f insert_data.sql
+
