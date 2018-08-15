@@ -21,6 +21,8 @@ module.exports = function(dbname="waiter_availability") {
             console.log(chalk.bgRed.white('Username taken'));
             return 'user exists';
         }
+        if (!waiter.position)
+            waiter.position = 'waiter';
         await pool.query(`insert into users(username, full_name, position) values ('${waiter.username}', '${waiter.full_name}', '${waiter.position}')`);
     }
 
@@ -44,19 +46,25 @@ module.exports = function(dbname="waiter_availability") {
                 let dayId = await pool.query('select id from weekdays where day_name=$1', [day]);
                 await pool.query('insert into shifts(user_id, weekday_id) values ($1, $2)', [userId, dayId.rows[0].id]);
             } catch (err) {
-                console.log(chalk.bgRed.white(' Could not register for ' + day));
+                console.log(chalk.bgRed.white('Could not register for ' + day));
             }
         }
     }
 
     async function getShifts() {
-        let res = await pool.query('select user_id, weekday_id from shifts');
+        let res = await pool.query('select user_id, weekday_id from shifts order by weekday_id');
         let results = res.rows;
         var shiftData = [];
 
         for(let row of results){
-            var user = await pool.query('select username from users where id=$1 limit 1', [row.user_id])
-            let weekday = await pool.query('select day_name from weekdays where id=$1 limit 1', [row.weekday_id]);
+            var user = await pool.query(
+                'select username from users where id=$1 limit 1', 
+                [row.user_id]
+            );
+            let weekday = await pool.query(
+                'select day_name from weekdays where id=$1 limit 1',
+                [row.weekday_id]
+            );
             shiftData.push({
                 username: user.rows[0].username, 
                 weekday: weekday.rows[0].day_name
@@ -66,16 +74,17 @@ module.exports = function(dbname="waiter_availability") {
     }
 
     async function orderByDay(){
-        let users = await getAllUsers();
         let shifts = await getShifts();
         let shiftData = [];
 
         for (let shift of shifts){
-            let shiftForDay = shiftData.find((currentShift) => shift.weekday === currentShift.weekday )
+            let shiftForDay = shiftData.find((currentShift) => {
+                return shift.weekday === currentShift.weekday;
+            });
+
             if (shiftForDay) {
                 shiftForDay.waiters.push(shift.username);
-            }
-            else {
+            } else {
                 shiftData.push({
                     weekday : shift.weekday,
                     waiters : [shift.username]
@@ -83,6 +92,13 @@ module.exports = function(dbname="waiter_availability") {
             }
         }
         return shiftData;
+    }
+    async function clearShifts(){
+        try {
+            await pool.query('select * from weekdays');
+        } catch(err) {
+            console.log(chalk.bgRed.white('Could not clear shifts'));
+        }
     }
 
     async function updateActiveUser(value) {
@@ -111,6 +127,7 @@ module.exports = function(dbname="waiter_availability") {
         reset: resetData,
         addUser: addWaiter,
         users: getAllUsers,
+        clear: clearShifts,
         updateActiveUser,
         getShifts, 
         registerShift,

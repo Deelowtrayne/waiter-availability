@@ -4,7 +4,7 @@ create table users (
     id serial not null primary key,
     username varchar(20) not null,
     full_name varchar(20) not null,
-    position varchar(10) not null
+    position varchar(10) not null default 'waiter'
 );
 
 create table weekdays (

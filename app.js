@@ -20,11 +20,11 @@ app.engine('handlebars', exphb({
         },
         'rowStyle': function() {
             if (this.waiters.length > 2)
-                return 'bgRed';
+                return 'bgGreen';
             else if (this.waiters.length > 1)
                 return 'bgBlue';
             else
-                return 'bgGreen';
+                return 'bgRed';
         }
     }
 }));
@@ -42,6 +42,13 @@ app.get('/', (req, res) => {
 app.post('/sign-in', (req, res) => {
     res.redirect('/waiter/' + req.body.username);
 });
+
+app.post('/register', async (req, res) => {
+    let result = await waiterApp.addUser(req.body);
+    let status = result ?
+        result : 'user successfully added';
+    res.render('home', { status });
+})
 
 app.get('/waiter/not-found', (req, res) => {
     res.render('dashboard');

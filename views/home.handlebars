@@ -1,8 +1,21 @@
 <title></title>
+<center>{{status}}</center>
 <div id="login">
     <form action="/sign-in/" method="post">
         <h3>Sign in</h3>
-        <input type="text" name="username" id="username-input" placeholder="Enter your username">
+        <input type="text" name="username" id="username-input" placeholder="Enter your username" required>  
         <input type="submit" value="sign in">
     </form>
+    <button class="blue-link reg-toggle-btn" onclick="toggleRegistration()">Register new user</button>
+    <div class="register-form hide">
+        <hr>
+        <form action="/register/" method="post">
+            <h3>Register</h3>
+            <input type="text" name="username" id="username-input" placeholder="Username, e.g. lsono" required>
+            <input type="text" name="full_name" id="username-input" placeholder="Full name, e.g. Luvuyo Sono" required>
+            <br>
+            <input type="checkbox" name="position" value="admin">admin <br>
+            <input type="submit" value="register new user">
+        </form>
+    </div>
 </div>

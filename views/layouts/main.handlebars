@@ -18,5 +18,16 @@
             {{{body}}}
         </div>
     </div>
+    <script>
+        function toggleRegistration(){
+            let regForm = document.querySelector('.register-form');
+            let toggleBtn = document.querySelector('.reg-toggle-btn');
+            // hide/show registration form
+            regForm.classList.toggle('hide');
+            // Change button text
+            toggleBtn.innerHTML = regForm.classList.length < 1 ? 
+            'Register new user' : 'Hide register form';
+        }
+    </script>
 </body>
 </html>
