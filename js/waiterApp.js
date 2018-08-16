@@ -36,10 +36,6 @@ module.exports = function(dbname="waiter_availability") {
         const found = await pool.query('select id from users where username=$1', [shift.username]);
         const userId = found.rows[0].id;
 
-        // {
-        //     username: "deelow",
-        //     weekdays: []
-        // }
         await pool.query('delete from shifts where user_id=$1', [userId]);
         for(let day of days){
             try {
@@ -116,16 +112,18 @@ module.exports = function(dbname="waiter_availability") {
 
         if (username) {
             let foundDays = await pool.query('SELECT day_name FROM shifts JOIN users ON users.id = shifts.user_id JOIN weekdays ON weekdays.id = shifts.weekday_id WHERE username=$1', [username]);
+            let checkedDays = foundDays.rows
             for (let i=0; i < days.length; i++) {
-                for(let current of foundDays.rows) {
+                for(let current of checkedDays) {
+
                     if (days[i].day_name === current.day_name){
                         days[i].checked = true;
                     }
-                    console.log(days[i]);
-                    
                 }
             }
         }
+        console.log(days);
+        
         return days;
     }
 
