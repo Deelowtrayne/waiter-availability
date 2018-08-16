@@ -4,7 +4,7 @@
   "description": "Simple waiter shift recording application",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha",
     "dev": "nodemon app",
     "start": "node app.js"
   },
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "nyc": "^12.0.2"
   }
 }
