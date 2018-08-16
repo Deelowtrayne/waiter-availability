@@ -11,12 +11,9 @@ const PORT = process.env.PORT || 3000;
 app.engine('handlebars', exphb({
     defaultLayout: 'main',
     helpers:{
-        'waitersOnDuty': function() {
-            let output = '';
-            for (let waiter of this.waiters) {
-                output += (waiter + " - ");
-            }
-            return output;
+        'checkedDay': function() {
+            if (this.checked)
+                return 'checked';
         },
         'rowStyle': function() {
             if (this.waiters.length > 3)
@@ -60,7 +57,7 @@ app.get('/waiter/:username', async (req, res, next) => {
         let context = {};
         if (await waiterApp.updateActiveUser(user)) {
             context.username = await waiterApp.getActiveUser;
-            context.weekdays = await waiterApp.getWeekdays();
+            context.weekdays = await waiterApp.getWeekdays(user);
         }
         res.render('dashboard', context);
     } catch (err) {

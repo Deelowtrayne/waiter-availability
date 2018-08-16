@@ -110,9 +110,23 @@ module.exports = function(dbname="waiter_availability") {
         return false
     }
 
-    async function getWeekdays() {
-        let results = await pool.query('select * from weekdays');
-        return results.rows;
+    async function getWeekdays(username) {
+        let weekdays = await pool.query('select * from weekdays');
+        let days = weekdays.rows;
+
+        if (username) {
+            let foundDays = await pool.query('SELECT day_name FROM shifts JOIN users ON users.id = shifts.user_id JOIN weekdays ON weekdays.id = shifts.weekday_id WHERE username=$1', [username]);
+            for (let i=0; i < days.length; i++) {
+                for(let current of foundDays.rows) {
+                    if (days[i].day_name === current.day_name){
+                        days[i].checked = true;
+                    }
+                    console.log(days[i]);
+                    
+                }
+            }
+        }
+        return days;
     }
 
     async function stopQuery(){
