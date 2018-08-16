@@ -19,12 +19,12 @@ app.engine('handlebars', exphb({
             return output;
         },
         'rowStyle': function() {
-            if (this.waiters.length > 2)
-                return 'bgGreen';
-            else if (this.waiters.length > 1)
-                return 'bgBlue';
-            else
+            if (this.waiters.length > 3)
                 return 'bgRed';
+            else if (this.waiters.length === 3)
+                return 'bgGreen';
+            else
+                return 'bgBlue';
         }
     }
 }));
