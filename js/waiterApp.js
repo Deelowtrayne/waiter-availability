@@ -40,7 +40,7 @@ module.exports = function(dbname="waiter_availability") {
         //     username: "deelow",
         //     weekdays: []
         // }
-
+        await pool.query('delete from shifts where user_id=$1', [userId]);
         for(let day of days){
             try {
                 let dayId = await pool.query('select id from weekdays where day_name=$1', [day]);

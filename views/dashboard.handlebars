@@ -4,7 +4,11 @@
 {{/if}}
 <hr>
 <!-- weekday list display -->
-
+{{#if messages.info}}
+<div>
+    <center>{{messages.info}}</center>
+</div>
+{{/if}}
 <div class="weekday-display">
     {{#if weekdays}}
     <h4>Choose your shifts: </h4>

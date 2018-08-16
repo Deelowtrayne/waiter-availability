@@ -2,6 +2,8 @@
 const express = require('express');
 const exphb = require('express-handlebars');
 const bodyParser = require('body-parser');
+const flash = require('express-flash');
+const session = require('express-session');
 const WaiterApp = require('./js/waiterApp');
 
 const app = express();
@@ -26,7 +28,15 @@ app.engine('handlebars', exphb({
     }
 }));
 app.set('view engine', 'handlebars');
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}));
+
 app.use(express.static('public'));
+app.use(flash());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -68,18 +78,19 @@ app.get('/waiter/:username', async (req, res, next) => {
 app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
     let wd = Array.isArray(req.body.checkedWeekdays)?
         req.body.checkedWeekdays : new Array(req.body.checkedWeekdays);
-    console.log(wd);
 
-    if (!wd[0]) {
-        res.redirect('/waiter/' + req.params.username)
-    }
+    let message = ""
 
     try {
-        await waiterApp.registerShift({
-            username: req.params.username,
-            weekdays: wd
-        });
-        res.redirect('/days');
+        if (wd[0]) {
+            await waiterApp.registerShift({
+                username: req.params.username,
+                weekdays: wd
+            });
+            message = "shifts successfully added!"
+        }
+        req.flash('info', 'Shift(s) successfully added!');
+        res.redirect('/waiter/' + req.params.username);
     } catch (err) {
         next(err);
     }
