@@ -69,10 +69,18 @@ app.get('/waiter/:username', async (req, res, next) => {
 });
 
 app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
+    let wd = Array.isArray(req.body.checkedWeekdays)?
+        req.body.checkedWeekdays : new Array(req.body.checkedWeekdays);
+    console.log(wd);
+
+    if (!wd[0]) {
+        res.redirect('/waiter/' + req.params.username)
+    }
+
     try {
         await waiterApp.registerShift({
             username: req.params.username,
-            weekdays: req.body.checkedWeekdays
+            weekdays: wd
         });
         res.redirect('/days');
     } catch (err) {
