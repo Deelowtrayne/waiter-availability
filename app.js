@@ -12,12 +12,12 @@ const PORT = process.env.PORT || 3000;
 
 app.engine('handlebars', exphb({
     defaultLayout: 'main',
-    helpers:{
-        'checkedDay': function() {
+    helpers: {
+        'checkedDay': function () {
             if (this.checked)
                 return 'checked';
         },
-        'rowStyle': function() {
+        'rowStyle': function () {
             if (this.waiters.length > 3)
                 return 'bgRed';
             else if (this.waiters.length === 3)
@@ -32,38 +32,54 @@ app.set('view engine', 'handlebars');
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { maxAge: 600000 }
 }));
 
 app.use(express.static('public'));
 app.use(flash());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes
 app.get('/', (req, res) => {
+
     res.render('home');
 });
 
 //sign-in route
-app.post('/sign-in', (req, res) => {
-    res.redirect('/waiter/' + req.body.username);
+app.post('/sign-in', async (req, res) => {
+    let user = await waiterApp.getUser(req.body.username);
+    if (user) {
+        req.session.username = user;
+        res.redirect('/waiter');
+        return;
+    }
+    req.flash('error', 'Please enter a valid user');
+    res.redirect('/');
 });
 
 app.post('/register', async (req, res) => {
     let result = await waiterApp.addUser(req.body);
+    if (req.body.isAdmin === chec) { }
+
     let status = result ?
         result : 'user successfully added';
     res.render('home', { status });
-})
-
-app.get('/waiter/not-found', (req, res) => {
-    res.render('dashboard');
 });
 
-app.get('/waiter/:username', async (req, res, next) => {
+app.get('/logout', function (req, res) {
+    delete req.session.username;
+    res.redirect('/');
+});
+
+app.get('/waiter', async (req, res, next) => {
     try {
-        let user = req.params.username;
+        let user = req.session.username;
+        if (!user) {
+            res.redirect('/');
+            return;
+        }
         let context = {};
         if (await waiterApp.updateActiveUser(user)) {
             context.username = await waiterApp.getActiveUser;
@@ -75,8 +91,14 @@ app.get('/waiter/:username', async (req, res, next) => {
     }
 });
 
-app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
-    let wd = Array.isArray(req.body.checkedWeekdays)?
+app.post('/waiter/assign-shifts', async (req, res, next) => {
+
+    if (!req.session.username) {
+        res.render('dashboard');
+        return;
+    }
+
+    let wd = Array.isArray(req.body.checkedWeekdays) ?
         req.body.checkedWeekdays : new Array(req.body.checkedWeekdays);
 
     let message = ""
@@ -84,7 +106,7 @@ app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
     try {
         if (wd[0]) {
             await waiterApp.registerShift({
-                username: req.params.username,
+                username: req.session.username,
                 weekdays: wd
             });
             message = "shifts successfully added!"
@@ -95,6 +117,10 @@ app.post('/waiter/:username/assign-shifts', async (req, res, next) => {
         next(err);
     }
 });
+
+app.get('/waiter/:whatever', (req, res) => {
+    res.redirect('/waiter')
+})
 
 app.get('/days', async (req, res, next) => {
     try {

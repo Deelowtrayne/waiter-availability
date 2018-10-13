@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/css/weekdays.css">
 {{#if username}}
 <span>{{username}}'s dashboard</span>
+<span><a href="/logout">Logout</a></span>
 {{/if}}
 <hr>
 <!-- weekday list display -->
@@ -12,7 +13,7 @@
 <div class="weekday-display">
     {{#if weekdays}}
     <h4>Choose your shifts: </h4>
-    <form action="/waiter/{{username}}/assign-shifts" method="post">
+    <form action="/waiter/assign-shifts" method="post">
         <ul class="unstyled weekdays">
             {{#each weekdays}}
             <li class="weekday">
@@ -28,6 +29,7 @@
         </ul>
         <input type="submit" value="Submit">
     </form>
+    <a href="/days"><small class="blue-link">Go to shifts</small> &rarr; </a>
     {{else}}
     <h2 style="font-size:200%; font-weight:400; color:crimson;">Please enter a registered user</h2>
     <a class="blue-link" style="color:blue; font-size:140%;" href="/">&larr; Go to sign in</a>

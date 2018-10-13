@@ -3,6 +3,9 @@
 <div id="login">
     <form action="/sign-in/" method="post">
         <h3>Sign in</h3>
+        {{#if messages.error}}
+        <label for="username">{{messages.error}}</label>
+        {{/if}}
         <input type="text" name="username" id="username-input" placeholder="Enter your username" required>  
         <input type="submit" value="sign in">
     </form>

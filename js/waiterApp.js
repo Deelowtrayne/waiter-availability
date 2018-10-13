@@ -4,8 +4,6 @@ const chalk = require('chalk');
 module.exports = function(dbname="waiter_availability") {
     const pool = dbconx(dbname);
 
-    var activeUser = '';
-
     async function resetData(){
         try{
             await pool.query('truncate table shifts');
@@ -22,7 +20,7 @@ module.exports = function(dbname="waiter_availability") {
             return 'user exists';
         }
         if (!waiter.position)
-            waiter.position = 'waiter';
+            waiter.position = 'Waiter';
         await pool.query(`insert into users(username, full_name, position) values ('${waiter.username}', '${waiter.full_name}', '${waiter.position}')`);
     }
 
@@ -97,11 +95,11 @@ module.exports = function(dbname="waiter_availability") {
         }
     }
 
-    async function updateActiveUser(value) {
+    async function getUser(value) {
         let found = await pool.query('select username from users where username=$1', [value]);
         if (found.rowCount > 0) {
-            activeUser = found.rows[0].username;
-            return true;
+            return found.rows[0].username;
+            
         }
         return false
     }
@@ -140,12 +138,11 @@ module.exports = function(dbname="waiter_availability") {
         addUser: addWaiter,
         users: getAllUsers,
         clear: clearShifts,
-        updateActiveUser,
         getShifts, 
         registerShift,
         getWeekdays,
         orderByDay,
-        getActiveUser,
+        getUser,
         stopQuery
     }
 }

@@ -4,7 +4,7 @@
   "description": "Simple waiter shift recording application",
   "main": "app.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "nyc --reporter=html --reporter=text mocha",
     "dev": "nodemon app",
     "start": "node app.js"
   },

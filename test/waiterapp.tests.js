@@ -16,6 +16,18 @@ describe ("Tests the user functions", () =>{
         assert.deepEqual(await waiterInstance.users(), [{username: 'Tranquil', position:'Waiter'}]);
     });
     
+    it("tests that function autmatically makes the new user a waiter if no pos if provided", async () => {
+        let user = {
+            username: 'Coder',
+            full_name: 'Codex Vibes'
+        }
+        await waiterInstance.addUser(user)
+        assert.deepEqual(await waiterInstance.users(), [
+            {username: 'Tranquil', position: 'Waiter'},
+            {username: 'Coder', position: 'Waiter'}
+        ]);
+    });
+    
     it("tests id add user restricts duplicate entries", async () => {
         let user = {
             username: 'Tranquil',
@@ -97,13 +109,15 @@ describe('tests the user update functions', () => {
 
     beforeEach(async () => await waiterInstance.reset());
     it("tests that the function updates the active user", async () => {
-        ;
         assert.deepEqual(await waiterInstance.updateActiveUser('Tranquil'), true);
     });
 
     it("tests that the function fails to update active user if user is not registered", async () => {
-        ;
         assert.deepEqual(await waiterInstance.updateActiveUser('Umkhowudi'), false);
+    });
+
+    it("tests that the function gets the active user", async () => {
+        assert.deepEqual(await waiterInstance.getActiveUser(), 'Tranquil');
     });
 
     after(async () => await waiterInstance.stopQuery())
